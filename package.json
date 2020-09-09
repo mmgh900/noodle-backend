@@ -1,0 +1,19 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Sample backend project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://igit.partdp.ir/software-development-internship-2/developer/sample-project/backend.git"
+  },
+  "author": "Majid Yaghouti",
+  "license": "MIT",
+  "dependencies": {
+    "maya-router": "^1.1.3",
+    "maya-server": "^1.0.0"
+  }
+}
