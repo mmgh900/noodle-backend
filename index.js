@@ -18,7 +18,6 @@ function loadApps() {
   const appNames = fs.readdirSync(c.appsDirectory);
   appNames.forEach(appName => {
     const app = require(`${c.appsDirectory}/${appName}`);
-    console.log('app', app);
     Object.keys(app.routes).forEach(route => {
       Object.keys(app.routes[route]).forEach(method => {
         const routeObj = {
@@ -27,7 +26,6 @@ function loadApps() {
           function: app.routes[route][method].function,
           middlewares: app.routes[route][method].middlewares
         };
-        console.log('routeObj', routeObj);
         router.addRoute(routeObj);
       });
     });
