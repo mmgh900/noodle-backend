@@ -8,7 +8,10 @@ const routerConfig = {
   eventEmitter: null
 };
 
+const appsDirectory = './apps';
+
 module.exports = {
   serverConfig,
-  routerConfig
+  routerConfig,
+  appsDirectory
 };

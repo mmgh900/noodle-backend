@@ -13,7 +13,7 @@
   "author": "Majid Yaghouti",
   "license": "MIT",
   "dependencies": {
-    "maya-router": "^1.1.3",
+    "maya-router": "^1.1.4",
     "maya-server": "^1.0.0"
   }
 }

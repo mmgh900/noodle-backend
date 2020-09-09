@@ -11,6 +11,25 @@ c.routerConfig.eventEmitter = eventEmitter;
 const server = new Server(c.serverConfig);
 const router = new Router(c.routerConfig);
 
-router.addRoute({route: '/r1', method: 'GET', handler: 'f1', middlewares: []});
 server.start();
+loadApps();
 
+function loadApps() {
+  const appNames = fs.readdirSync(c.appsDirectory);
+  appNames.forEach(appName => {
+    const app = require(`${c.appsDirectory}/${appName}`);
+    console.log('app', app);
+    Object.keys(app.routes).forEach(route => {
+      Object.keys(app.routes[route]).forEach(method => {
+        const routeObj = {
+          route,
+          method,
+          function: app.routes[route][method].function,
+          middlewares: app.routes[route][method].middlewares
+        };
+        console.log('routeObj', routeObj);
+        router.addRoute(routeObj);
+      });
+    });
+  });
+}
