@@ -15,19 +15,19 @@ server.start();
 loadApps();
 
 function loadApps() {
-  const serviceNames = fs.readdirSync(c.servicesDirectory);
-  serviceNames.forEach(appName => {
-    const app = require(`${c.servicesDirectory}/${appName}`);
-    Object.keys(app.routes).forEach(route => {
-      Object.keys(app.routes[route]).forEach(method => {
-        const routeObj = {
-          route,
-          method,
-          function: app.routes[route][method].function,
-          middlewares: app.routes[route][method].middlewares
-        };
-        router.addRoute(routeObj);
-      });
+    const serviceNames = fs.readdirSync(c.servicesDirectory);
+    serviceNames.forEach(appName => {
+        const app = require(`${c.servicesDirectory}/${appName}`);
+        Object.keys(app.routes).forEach(route => {
+            Object.keys(app.routes[route]).forEach(method => {
+                const routeObj = {
+                    route,
+                    method,
+                    function: app.routes[route][method].function,
+                    middlewares: app.routes[route][method].middlewares
+                };
+                router.addRoute(routeObj);
+            });
+        });
     });
-  });
 }

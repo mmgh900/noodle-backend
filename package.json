@@ -15,6 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "noodle-router": "^1.1.4",
-    "noodle-server": "^1.0.0"
+    "noodle-server": "^1.0.0",
+    "pg": "^8.7.3"
   }
 }
