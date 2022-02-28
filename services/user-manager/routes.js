@@ -1,5 +1,5 @@
 const userCtrl = require('./controllers/user');
-const dataParser = require('maya-data-parser');
+const dataParser = require('noodle-data-parser');
 
 module.exports = {
   '/users': {

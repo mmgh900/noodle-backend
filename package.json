@@ -1,6 +1,6 @@
 {
-  "name": "backend",
-  "version": "1.1.0",
+  "name": "noodle-backend",
+  "version": "1.1.1",
   "description": "Sample backend project",
   "main": "index.js",
   "scripts": {
@@ -11,10 +11,10 @@
     "type": "git",
     "url": "http://igit.partdp.ir/software-development-internship-2/developer/sample-project/backend.git"
   },
-  "author": "Majid Yaghouti",
+  "author": "Noodle.js Team",
   "license": "MIT",
   "dependencies": {
-    "maya-router": "^1.1.4",
-    "maya-server": "^1.0.0"
+    "noodle-router": "^1.1.4",
+    "noodle-server": "^1.0.0"
   }
 }

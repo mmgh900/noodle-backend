@@ -1,7 +1,7 @@
 const fs = require('fs');
 const EventEmitter = require('events');
-const Server = require('maya-server');
-const Router = require('maya-router');
+const Server = require('noodle-server');
+const Router = require('noodle-router');
 const c = require('./config');
 
 const eventEmitter = new EventEmitter();
