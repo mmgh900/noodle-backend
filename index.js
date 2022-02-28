@@ -17,7 +17,7 @@ loadApps();
 function loadApps() {
   const serviceNames = fs.readdirSync(c.servicesDirectory);
   serviceNames.forEach(appName => {
-    const app = require(`${c.appsDirectory}/${appName}`);
+    const app = require(`${c.servicesDirectory}/${appName}`);
     Object.keys(app.routes).forEach(route => {
       Object.keys(app.routes[route]).forEach(method => {
         const routeObj = {
