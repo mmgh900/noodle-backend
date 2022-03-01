@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ."
+    "start": "nodemon ."
   },
   "repository": {
     "type": "git",
@@ -17,5 +17,8 @@
     "noodle-router": "^1.1.4",
     "noodle-server": "^1.0.0",
     "pg": "^8.7.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
