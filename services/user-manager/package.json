@@ -12,6 +12,8 @@
   "author": "Noodle Team",
   "license": "MIT",
   "dependencies": {
-    "noodle-data-parser": "^1.0.1"
+    "jsonwebtoken": "^8.5.1",
+    "noodle-data-parser": "^1.0.1",
+    "noodle-user-authentication": "^1.0.0"
   }
 }

@@ -5,7 +5,6 @@ class User {
         this._username = user.username;
         this._password = user.password || null;
         this._name = user.name || null;
-        this._family = user.family || null;
     }
 
     static init() {
@@ -13,12 +12,12 @@ class User {
     }
 
 
-    add() {
+    save() {
         // TODO: Replace with database queries
         let user = {
             username: this._username,
             name: this._name,
-            family: this._family
+            password: this._password
         };
         usersList.push(user);
     }
