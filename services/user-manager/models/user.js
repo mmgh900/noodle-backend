@@ -1,4 +1,5 @@
 let usersList = [];
+const query = require('../../../db')
 
 class User {
     constructor(user) {
@@ -8,19 +9,46 @@ class User {
         this._family = user.family || null;
     }
 
-    static init() {
-        // TODO: Creating users table if not exists
+    /**
+     * Different types of user
+     * @type {{admin: number, employee: number, supporter: number}}
+     */
+    static UserTypes = {
+        "employee": 1,
+        "supporter": 2,
+        "admin": 3
+    }
+
+     static async init() {
+         await query(
+            `
+            do $$
+            begin 
+                CREATE TABLE IF NOT EXISTS "User"(
+                    username character varying NOT NULL,
+                    type smallint NOT NULL DEFAULT 1,
+                    password character varying NOT NULL,
+                    PRIMARY KEY (username)
+                );
+            end;
+            $$
+            `
+        )
+        console.log("User table created!")
     }
 
 
-    add() {
-        // TODO: Replace with database queries
-        let user = {
-            username: this._username,
-            name: this._name,
-            family: this._family
-        };
-        usersList.push(user);
+
+    addEmployee(username, password) {
+        query(`
+            do $$
+            begin
+                INSERT INTO User
+                    username, type, password)
+                    VALUES ($1, $2, $3);
+            end;
+            $$
+        `, [username, 1, password])
     }
 
     static getAll() {
