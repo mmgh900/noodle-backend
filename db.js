@@ -9,4 +9,4 @@ const pool = new Pool({
     idleTimeoutMillis: 2
 })
 
-module.exports = async (query, parameters) => await pool.query(query, parameters)
+module.exports = (query, parameters) => pool.query(query, parameters)

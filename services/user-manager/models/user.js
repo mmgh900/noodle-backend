@@ -19,13 +19,13 @@ class User {
             begin 
                 CREATE TABLE IF NOT EXISTS public."User"
                 (
+                    firstname character varying,
+                    lastname character varying,
+                    email character varying,
                     username character varying NOT NULL,
                     password character(15) NOT NULL,
                     type smallint NOT NULL,
-                    firstname character varying NOT NULL,
-                    lastname character varying NOT NULL,
-                    email character varying NOT NULL,
-                    "createdAt" date NOT NULL,
+                    createdAt timestamp NOT NULL,
                     PRIMARY KEY (username)
                 );
             end;
@@ -33,34 +33,30 @@ class User {
             `
         )
         console.log("User table created!")
-      // super user
+        // super user
+        this.add(null, null, null, "admin", "admin", this.UserTypes.admin)
         console.log("SuperUser created!")
     }
 
-    static addUser(username, type, password) {
-        query(`
-            do $$
-            begin
-                INSERT INTO User
-                    username, type, password)
-                    VALUES ($1, $2, $3);
-            end;
-            $$
-        `, [username, type, password])
+    static async add(firstname, lastname, email, username, password, type) {
+         const p = query(`
+        
+                INSERT INTO public."User"
+                (firstname, lastname, email, username, password, type, createdAt)
+                    VALUES ($1, $2, $3, $4, $5, $6, to_timestamp(${Date.now()} / 1000.0));
+         
+        `, [firstname, lastname, email, username, password, type])
+        // .then(error => console.log)
+        // .catch(error => console.log)
 
     }
 
 
-    static getAllUsers() {
+    static async getAll() {
         // TODO: Replace with database queries
-        return usersList.map(user => {
-            user = JSON.parse(JSON.stringify(user));
-            delete user.password;
-            return user;
-        });
     }
 
-    static deleteUser(){
+    static async delete() {
         //delete
     }
 
