@@ -19,8 +19,8 @@ class User {
         "admin": 3
     }
 
-     static async init() {
-         await query(
+    static async init() {
+        await query(
             `
             do $$
             begin 
@@ -38,8 +38,7 @@ class User {
     }
 
 
-
-    addEmployee(username, password) {
+    addUser(username, type, password) {
         query(`
             do $$
             begin
@@ -48,8 +47,9 @@ class User {
                     VALUES ($1, $2, $3);
             end;
             $$
-        `, [username, 1, password])
+        `, [username, type, password])
     }
+
 
     static getAll() {
         // TODO: Replace with database queries
