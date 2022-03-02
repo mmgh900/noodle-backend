@@ -4,9 +4,9 @@ const pool = new Pool({
     user: process.env.PGUSER || 'postgres',
     host: process.env.PGHOST || 'localhost',
     database: process.env.PGDATABASE || 'NoodleDb',
-    password: process.env.PGPASSWORD || 'NoodlesAreDelicious',
+    password: process.env.PGPASSWORD || 'MmGh9000',
     max: 20,
     idleTimeoutMillis: 2
 })
 
-module.exports =  pool.query
+module.exports = async (query, parameters) => await pool.query(query, parameters)
