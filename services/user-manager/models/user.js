@@ -1,12 +1,6 @@
-let usersList = [];
 const query = require('../../../db')
 
 class User {
-    constructor(user) {
-        this._username = user.username;
-        this._password = user.password || null;
-        this._name = user.name || null;
-    }
 
     /**
      * Different types of user
@@ -23,10 +17,15 @@ class User {
             `
             do $$
             begin 
-                CREATE TABLE IF NOT EXISTS "User"(
+                CREATE TABLE IF NOT EXISTS public."User"
+                (
                     username character varying NOT NULL,
-                    type smallint NOT NULL DEFAULT 1,
-                    password character varying NOT NULL,
+                    password character(15) NOT NULL,
+                    type smallint NOT NULL,
+                    firstname character varying NOT NULL,
+                    lastname character varying NOT NULL,
+                    email character varying NOT NULL,
+                    "createdAt" date NOT NULL,
                     PRIMARY KEY (username)
                 );
             end;
@@ -34,9 +33,11 @@ class User {
             `
         )
         console.log("User table created!")
+      // super user
+        console.log("SuperUser created!")
     }
 
-    addUser(username, type, password) {
+    static addUser(username, type, password) {
         query(`
             do $$
             begin
@@ -50,13 +51,17 @@ class User {
     }
 
 
-    static getAll() {
+    static getAllUsers() {
         // TODO: Replace with database queries
         return usersList.map(user => {
             user = JSON.parse(JSON.stringify(user));
             delete user.password;
             return user;
         });
+    }
+
+    static deleteUser(){
+        //delete
     }
 
 }
