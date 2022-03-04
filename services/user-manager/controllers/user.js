@@ -8,19 +8,40 @@ const {
     getStatusCode,
 } = require('http-status-codes');
 
+async function login(req, res) {
+    const user = await User.get(req.user.username)
+    const token = jwt.sign(
+        {
+            username: user.username,
+            type: user.type
+        },
+        c.authConfig.TOKEN_KEY,
+        {
+            expiresIn: "2h",
+        }
+    );
+    if (user.password === req.data.password) {
+        res.statusCode = StatusCodes.OK
+        res.setHeader('Content-Type', c.contentTypes.JSON);
+        res.end(JSON.stringify({
+            username: user.username,
+            token
+        }));
+    }
 
-function getUsers(req, res) {
-    let users = User.getAll();
-    res.statusCode = StatusCodes.OK
-    res.setHeader('Content-Type', c.contentTypes.JSON);
-    res.end(JSON.stringify({users}));
 }
 
-function createUser(req, res) {
-    if (req.user.type < req.data.type) {
-
+function getUsers(type) {
+    return async (req, res) => {
+        let users = await User.getAll(type);
+        res.statusCode = StatusCodes.OK
+        res.setHeader('Content-Type', c.contentTypes.JSON);
+        res.end(JSON.stringify({users}));
     }
-    User.add(req.data)
+}
+
+async function createUser(req, res) {
+    await User.add(req.data)
     // Create token
     const token = jwt.sign(
         {
@@ -32,16 +53,17 @@ function createUser(req, res) {
             expiresIn: "2h",
         }
     );
-    const response = {
-        username: req.data.username,
-        token
-    }
+
     res.statusCode = StatusCodes.OK
     res.setHeader('Content-Type', c.contentTypes.JSON);
-    res.end(JSON.stringify(response));
+    res.end(JSON.stringify({
+        username: req.data.username,
+        token
+    }));
 }
 
 module.exports = {
     getUsers,
-    createUser
+    createUser,
+    login
 };

@@ -1,18 +1,14 @@
 {
-  "name": "noodle-user-manager",
-  "version": "1.1.1",
-  "description": "A Simple user manager service",
+  "name": "property-manager",
+  "version": "1.0.0",
+  "description": "Manages properties in noodle backend",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "users"
-  ],
   "author": "Noodle Team",
-  "license": "MIT",
+  "license": "ISC",
   "dependencies": {
-    "jsonwebtoken": "^8.5.1",
     "http-status-codes": "^2.2.0",
     "noodle-data-parser": "^1.0.1",
     "noodle-user-authentication": "^1.0.0",

@@ -1,5 +1,3 @@
-
-
 const contentTypes = {
   JSON: 'application/json'
 };
