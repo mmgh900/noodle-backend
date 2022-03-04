@@ -9,10 +9,11 @@ class User {
     email;
     type;
 
-    constructor(username, password, type, firstname, lastname, email) {
+    constructor(firstname, lastname, email, username, password, type) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
+        this.username = username;
         this.password = password;
         this.type = type;
     }
@@ -55,7 +56,6 @@ class User {
                     VALUES ($1, $2, $3, $4, $5, $6, to_timestamp(${Date.now()} / 1000.0));
          
         `, [firstname, lastname, email, username, password, type])
-
     }
 
     static async remove(username) {
