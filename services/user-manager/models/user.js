@@ -1,3 +1,6 @@
+const query = require("../../../db")
+const {UserTypes} = require("../../../config")
+
 class User {
     username;
     password;
@@ -17,8 +20,8 @@ class User {
     static async init() {
         await query(
             `
-            do $$
-            begin 
+            DO $$
+            BEGIN 
                 CREATE TABLE IF NOT EXISTS public."User"
                 (
                     firstname character varying,
@@ -30,13 +33,13 @@ class User {
                     createdAt timestamp NOT NULL,
                     PRIMARY KEY (username)
                 );
-            end;
+            END;
             $$
             `
         )
         console.log("User table created!")
-        // super user
-        this.add(null, null, null, "admin", "admin", this.UserTypes.admin)
+        // Creating superuser if doesn't exist
+        await query(`INSERT INTO  public."User" (username, password, type, createdAt) VALUES ('admin', 'admin', 3, CURRENT_TIMESTAMP) ON CONFLICT DO NOTHING;`)
         console.log("SuperUser created!")
     }
 
@@ -52,8 +55,6 @@ class User {
                     VALUES ($1, $2, $3, $4, $5, $6, to_timestamp(${Date.now()} / 1000.0));
          
         `, [firstname, lastname, email, username, password, type])
-        // .then(error => console.log)
-        // .catch(error => console.log)
 
     }
 

@@ -10,8 +10,16 @@ const routerConfig = {
 
 const servicesDirectory = './services';
 
+const UserTypes = {
+  "employee": 1,
+  "supporter": 2,
+  "admin": 3
+}
+
+
 module.exports = {
   serverConfig,
   routerConfig,
-  servicesDirectory
+  servicesDirectory,
+  UserTypes
 };

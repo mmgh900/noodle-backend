@@ -2,6 +2,7 @@ const propertyCtrl = require('./controllers/property');
 const dataParser = require('noodle-data-parser');
 const Authenticator = require('noodle-user-authentication');
 const authorization = require('noodle-user-authorization');
+const {authConfig} = require("./config");
 
 const authenticator = new Authenticator(authConfig)
 

@@ -1,15 +1,16 @@
 const contentTypes = {
-  JSON: 'application/json'
+    JSON: 'application/json'
 };
 
 const authConfig = {
-  TOKEN_KEY: "NoodlesAreDelicious"
+    TOKEN_KEY: "NoodlesAreDelicious"
 }
+
 
 const errors = {};
 
 module.exports = {
-  contentTypes,
-  authConfig,
-  errors
+    contentTypes,
+    authConfig,
+    errors
 };
