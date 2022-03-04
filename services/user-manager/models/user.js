@@ -1,6 +1,5 @@
 const query = require("../../../db")
-const {UserTypes} = require("../../../config")
-
+const {UserTypes} =  require('noodle-user-authorization');
 class User {
     username;
     password;
