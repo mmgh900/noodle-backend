@@ -18,9 +18,9 @@ class Property {
             (
                 id serial NOT NULL,
                 name character varying NOT NULL,
-                user_id character varying NOT NULL,
+                assignedTo character varying NOT NULL,
                 PRIMARY KEY (id),
-                FOREIGN KEY(user_id) REFERENCES public."User" (username) ON DELETE CASCADE
+                FOREIGN KEY(assignedTo) REFERENCES public."User" (username) ON DELETE CASCADE
             );
             `
         )
@@ -32,13 +32,13 @@ class Property {
         return result.rows
     }
 
-    static async add({name, user_id}) {
+    static async add({name, assignedTo}) {
         await query(`
             INSERT INTO public."Property"
-                (name, user_id)
+                (name, assignedTo)
                 VALUES ($1,$2)
                 RETURNING "Property"."id" AS id
-            `, [name, user_id])
+            `, [name, assignedTo])
     }
 
     static async remove(id) {
