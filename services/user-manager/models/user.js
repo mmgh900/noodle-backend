@@ -1,15 +1,17 @@
-const query = require('../../../db')
-
 class User {
+    username;
+    password;
+    firstname;
+    lastname;
+    email;
+    type;
 
-    /**
-     * Different types of user
-     * @type {{admin: number, employee: number, supporter: number}}
-     */
-    static UserTypes = {
-        "employee": 1,
-        "supporter": 2,
-        "admin": 3
+    constructor(username, password, type, firstname, lastname, email) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.password = password;
+        this.type = type;
     }
 
     static async init() {
@@ -38,8 +40,12 @@ class User {
         console.log("SuperUser created!")
     }
 
+    static async getAll() {
+        return usersList
+    }
+
     static async add(firstname, lastname, email, username, password, type) {
-         const p = query(`
+        const p = query(`
         
                 INSERT INTO public."User"
                 (firstname, lastname, email, username, password, type, createdAt)
@@ -51,15 +57,17 @@ class User {
 
     }
 
-
-    static async getAll() {
-        // TODO: Replace with database queries
+    static async remove(username) {
+        return "user deleted"
     }
 
-    static async delete() {
-        //delete
+    static async update(user) {
+        return "user updated"
     }
 
+    static async get(username) {
+        return new User("mmgh900", "1234", 1, "mahdi", "gheysari", "gheysari.mm@gmail.com",)
+    }
 }
 
 module.exports = User;

@@ -1,7 +1,3 @@
-const statusCodes = {
-  SUCCESS: 200
-};
-
 const contentTypes = {
   JSON: 'application/json'
 };
@@ -13,7 +9,6 @@ const authConfig = {
 const errors = {};
 
 module.exports = {
-  statusCodes,
   contentTypes,
   authConfig,
   errors
