@@ -1,25 +1,32 @@
 const User = require('../models/user');
 const c = require('../config');
 const jwt = require('jsonwebtoken');
+const {
+    ReasonPhrases,
+    StatusCodes,
+    getReasonPhrase,
+    getStatusCode,
+} = require('http-status-codes');
+
 
 function getUsers(req, res) {
     let users = User.getAll();
-    res.statusCode = c.statusCodes.SUCCESS;
-    console.log(req.user)
+    res.statusCode = StatusCodes.OK
     res.setHeader('Content-Type', c.contentTypes.JSON);
     res.end(JSON.stringify({users}));
 }
 
 function createUser(req, res) {
-    let user = new User({
-        username: req.data.username,
-        password: req.data.password,
-        name: req.data.name
-    });
-    user.save();
+    if (req.user.type < req.data.type) {
+
+    }
+    User.add(req.data)
     // Create token
     const token = jwt.sign(
-        {username: req.data.username},
+        {
+            username: req.data.username,
+            type: req.data.type
+        },
         c.authConfig.TOKEN_KEY,
         {
             expiresIn: "2h",
@@ -29,7 +36,7 @@ function createUser(req, res) {
         username: req.data.username,
         token
     }
-    res.statusCode = c.statusCodes.SUCCESS;
+    res.statusCode = StatusCodes.OK
     res.setHeader('Content-Type', c.contentTypes.JSON);
     res.end(JSON.stringify(response));
 }
