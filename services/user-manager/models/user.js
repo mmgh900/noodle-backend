@@ -49,14 +49,14 @@ class User {
 
     /**
      * @param type {UserTypes}
-     * @returns {Promise<*>}
+     * @returns {Promise<User[]>}
      */
     static async getAll(type) {
         let result;
         if (type) {
-            result = await query(`SELECT * FROM "User" WHERE type = $1;`, [type])
+            result = await query(`SELECT * FROM public."User" WHERE type = $1;`, [type])
         } else {
-            result = await query(`SELECT * FROM "User";`)
+            result = await query(`SELECT * FROM public."User";`)
         }
         return result.rows.map(item => {
             delete item.password
@@ -68,14 +68,14 @@ class User {
      * @param {User} user
      * @returns {Promise<void>}
      */
-    static async add(user) {
-        const {firstname, lastname, email, username, password, type} = user
-        const p = await query(`
+    static async add({firstname, lastname, email, username, password, type}) {
+        const result = await query(`
                 INSERT INTO public."User"
                 (firstname, lastname, email, username, password, type, createdAt)
                     VALUES ($1, $2, $3, $4, $5, $6, to_timestamp(${Date.now()} / 1000.0));
          
         `, [firstname, lastname, email, username, password, type])
+
     }
 
 
@@ -85,7 +85,7 @@ class User {
      */
     static async get(username) {
         const result = await query(`
-           SELECT * FROM "User" WHERE username = $1;
+           SELECT * FROM public."User" WHERE username = $1;
         `, [username])
         return result.rows[0]
     }

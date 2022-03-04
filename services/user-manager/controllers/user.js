@@ -48,10 +48,21 @@ function getUsers(type) {
 
 function createUser(type) {
     return async (req, res) => {
-        await User.add({
-            ...req.data,
-            type: type
-        })
+        try {
+            await User.add({
+                ...req.data,
+                type: type
+            })
+        } catch (e) {
+            if (e.code == 23505) {
+                res.statusCode = StatusCodes.CONFLICT
+                res.setHeader('Content-Type', c.contentTypes.JSON);
+                return res.end(JSON.stringify({
+                    message: "A user with this username already exists"
+                }));
+            }
+        }
+
         // Create token
         const token = jwt.sign(
             {
@@ -66,7 +77,7 @@ function createUser(type) {
 
         res.statusCode = StatusCodes.OK
         res.setHeader('Content-Type', c.contentTypes.JSON);
-        res.end(JSON.stringify({
+        return res.end(JSON.stringify({
             username: req.data.username,
             token
         }));
