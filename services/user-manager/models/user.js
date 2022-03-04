@@ -52,7 +52,16 @@ class User {
      * @returns {Promise<*>}
      */
     static async getAll(type) {
-        return usersList
+        let result;
+        if (type) {
+            result = await query(`SELECT * FROM "User" WHERE type = $1;`, [type])
+        } else {
+            result = await query(`SELECT * FROM "User";`)
+        }
+        return result.rows.map(item => {
+            delete item.password
+            return item
+        })
     }
 
     /**
@@ -69,21 +78,6 @@ class User {
         `, [firstname, lastname, email, username, password, type])
     }
 
-    /**
-     * @param {string} username
-     * @returns {Promise<void>}
-     */
-    static async remove(username) {
-        return "user deleted"
-    }
-
-    /**
-     * @param {User} user
-     * @returns {Promise<void>}
-     */
-    static async update(user) {
-        return "user updated"
-    }
 
     /**
      * @param {string} username
