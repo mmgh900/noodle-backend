@@ -1,4 +1,5 @@
 const Property = require('../models/property');
+const c = require('../config');
 const {
     ReasonPhrases,
     StatusCodes,

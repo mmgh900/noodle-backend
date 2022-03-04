@@ -9,6 +9,14 @@ class User {
     email;
     type;
 
+    /**
+     * @param username {string}
+     * @param password {string}
+     * @param type {UserTypes}
+     * @param firstname {string}
+     * @param lastname {string}
+     * @param email {string}
+     */
     constructor(username, password, type, firstname, lastname, email) {
         this.firstname = firstname;
         this.lastname = lastname;
@@ -20,8 +28,6 @@ class User {
     static async init() {
         await query(
             `
-            DO $$
-            BEGIN 
                 CREATE TABLE IF NOT EXISTS public."User"
                 (
                     firstname character varying,
@@ -33,8 +39,6 @@ class User {
                     createdAt timestamp NOT NULL,
                     PRIMARY KEY (username)
                 );
-            END;
-            $$
             `
         )
         console.log("User table created!")
@@ -43,13 +47,29 @@ class User {
         console.log("SuperUser created!")
     }
 
-    static async getAll() {
-        return usersList
+    /**
+     * @param type {UserTypes}
+     * @returns {Promise<User[]>}
+     */
+    static async getAll(type) {
+        let result;
+        if (type) {
+            result = await query(`SELECT * FROM public."User" WHERE type = $1;`, [type])
+        } else {
+            result = await query(`SELECT * FROM public."User";`)
+        }
+        return result.rows.map(item => {
+            delete item.password
+            return item
+        })
     }
 
-    static async add(firstname, lastname, email, username, password, type) {
-        const p = query(`
-        
+    /**
+     * @param {User} user
+     * @returns {Promise<void>}
+     */
+    static async add({firstname, lastname, email, username, password, type}) {
+        const result = await query(`
                 INSERT INTO public."User"
                 (firstname, lastname, email, username, password, type, createdAt)
                     VALUES ($1, $2, $3, $4, $5, $6, to_timestamp(${Date.now()} / 1000.0));
@@ -58,16 +78,16 @@ class User {
 
     }
 
-    static async remove(username) {
-        return "user deleted"
-    }
 
-    static async update(user) {
-        return "user updated"
-    }
-
+    /**
+     * @param {string} username
+     * @returns {Promise<void>}
+     */
     static async get(username) {
-        return new User("mmgh900", "1234", 1, "mahdi", "gheysari", "gheysari.mm@gmail.com",)
+        const result = await query(`
+           SELECT * FROM public."User" WHERE username = $1;
+        `, [username])
+        return result.rows[0]
     }
 }
 
