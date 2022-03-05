@@ -1,5 +1,12 @@
 const query = require("../../../db")
-const {UserTypes} =  require('noodle-user-authorization');
+const {
+    hashPassword,
+    comparePassword
+} = require('../utils/password-hashing');
+const c = require("../config")
+const {UserTypes} = require('noodle-user-authorization');
+const {primaryAdminConfig} = require("../config");
+
 class User {
     username;
     password;
@@ -33,7 +40,7 @@ class User {
                     lastname character varying,
                     email character varying,
                     username character varying NOT NULL,
-                    password character(15) NOT NULL,
+                    password character varying NOT NULL,
                     type smallint NOT NULL,
                     createdAt timestamp NOT NULL,
                     PRIMARY KEY (username)
@@ -42,7 +49,10 @@ class User {
         )
         console.log("User table created!")
         // Creating superuser if doesn't exist
-        await query(`INSERT INTO  public."User" (username, password, type, createdAt) VALUES ('admin', 'admin', 3, CURRENT_TIMESTAMP) ON CONFLICT DO NOTHING;`)
+        const hashedPassword = await hashPassword(primaryAdminConfig.password);
+        await query(`INSERT INTO  public."User" (username, password, type, createdAt) 
+                            VALUES ($1, $2, 3, CURRENT_TIMESTAMP) ON CONFLICT DO NOTHING;`,
+            [c.primaryAdminConfig.username, hashedPassword])
         console.log("SuperUser created!")
     }
 
