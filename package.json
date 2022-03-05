@@ -14,8 +14,7 @@
   "author": "Noodle.js Team",
   "license": "MIT",
   "dependencies": {
-    "bcrypt": "^5.0.1",
-    "noodle-router": "^1.1.4",
+    "noodle-router": "^1.2.4",
     "noodle-server": "^1.0.0",
     "pg": "^8.7.3"
   },

@@ -55,5 +55,11 @@ module.exports = {
             function: userCtrl.createUser(UserTypes.admin),
             middlewares: [authenticator, noodleUserAuthorization(UserTypes.admin), dataParser, signupValidator]
         }
+    },
+    '/test/:id_1/me/:id_2': {
+        GET: {
+            function: (req, res) => res.end(JSON.stringify(req.params)),
+            middlewares: [dataParser]
+        }
     }
 };
