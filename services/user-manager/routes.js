@@ -1,52 +1,59 @@
 const userCtrl = require('./controllers/user');
 const dataParser = require('noodle-data-parser');
 const Authenticator = require('noodle-user-authentication');
-const authorization = require('noodle-user-authorization');
-const {authConfig} = require("./config");
 
+const {authConfig} = require("./config");
+const {UserTypes, noodleUserAuthorization} =  require('noodle-user-authorization');
 const authenticator = new Authenticator(authConfig)
+const usersSchemas  = require('./schemas/users-schema')
+const NoodleDataValidation = require('noodle-data-validation')
+
+const signupValidator = new NoodleDataValidation(usersSchemas.createUser)
+const loginValidator = new NoodleDataValidation(usersSchemas.login)
+
+
 
 module.exports = {
     '/users': {
         GET: {
             function: userCtrl.getUsers(),
-            middlewares: [authenticator, authorization(3)]
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.admin)]
         },
     },
     '/users/login': {
         POST: {
             function: userCtrl.login,
-            middlewares: [authenticator]
+            middlewares: [dataParser, loginValidator]
         },
     },
     '/employees': {
         GET: {
-            function: userCtrl.getUsers(1),
-            middlewares: [authenticator, authorization(2)]
+            function: userCtrl.getUsers(UserTypes.employee),
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter)]
         },
         POST: {
-            function: userCtrl.createUser,
-            middlewares: [authenticator, authorization(2), dataParser]
+            function: userCtrl.createUser(UserTypes.employee),
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter), dataParser, signupValidator]
         }
     },
     '/supporters': {
         GET: {
-            function: userCtrl.getUsers(2),
-            middlewares: [authenticator, authorization(3)]
+            function: userCtrl.getUsers(UserTypes.supporter),
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.admin)]
         },
         POST: {
-            function: userCtrl.createUser,
-            middlewares: [authenticator, authorization(2), dataParser]
+            function: userCtrl.createUser(UserTypes.supporter),
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter), dataParser, signupValidator]
         }
     },
     '/admins': {
         GET: {
-            function: userCtrl.getUsers(3),
-            middlewares: [authenticator, authorization(3)]
+            function: userCtrl.getUsers(UserTypes.admin),
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.admin)]
         },
         POST: {
-            function: userCtrl.createUser,
-            middlewares: [authenticator, authorization(3), dataParser]
+            function: userCtrl.createUser(UserTypes.admin),
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.admin), dataParser, signupValidator]
         }
     }
 };

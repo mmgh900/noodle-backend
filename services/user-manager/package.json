@@ -15,7 +15,8 @@
     "jsonwebtoken": "^8.5.1",
     "http-status-codes": "^2.2.0",
     "noodle-data-parser": "^1.0.1",
+    "noodle-data-validation": "^2.1.0",
     "noodle-user-authentication": "^1.0.0",
-    "noodle-user-authorization": "^1.0.0"
+    "noodle-user-authorization": "^2.0.0"
   }
 }

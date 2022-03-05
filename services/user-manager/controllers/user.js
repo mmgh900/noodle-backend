@@ -40,7 +40,7 @@ const registerUser = async (req, res) => {
 
 
 async function login(req, res) {
-    const user = await User.get(req.user.username)
+    const user = await User.get(req.data.username)
     const token = jwt.sign(
         {
             username: user.username,
@@ -51,12 +51,18 @@ async function login(req, res) {
             expiresIn: "2h",
         }
     );
-    if (user.password === req.data.password) {
+    if (user.password.replace(/\s/g, '') === req.data.password) {
         res.statusCode = StatusCodes.OK
         res.setHeader('Content-Type', c.contentTypes.JSON);
         res.end(JSON.stringify({
             username: user.username,
             token
+        }));
+    } else {
+        res.statusCode = StatusCodes.FORBIDDEN
+        res.setHeader('Content-Type', c.contentTypes.JSON);
+        res.end(JSON.stringify({
+            message: "Your username or password is not valid!"
         }));
     }
 
@@ -71,26 +77,42 @@ function getUsers(type) {
     }
 }
 
-async function createUser(req, res) {
-    await User.add(req.data)
-    // Create token
-    const token = jwt.sign(
-        {
-            username: req.data.username,
-            type: req.data.type
-        },
-        c.authConfig.TOKEN_KEY,
-        {
-            expiresIn: "2h",
+function createUser(type) {
+    return async (req, res) => {
+        try {
+            await User.add({
+                ...req.data,
+                type: type
+            })
+        } catch (e) {
+            if (e.code == 23505) {
+                res.statusCode = StatusCodes.CONFLICT
+                res.setHeader('Content-Type', c.contentTypes.JSON);
+                return res.end(JSON.stringify({
+                    message: "A user with this username already exists"
+                }));
+            }
         }
-    );
 
-    res.statusCode = StatusCodes.OK
-    res.setHeader('Content-Type', c.contentTypes.JSON);
-    res.end(JSON.stringify({
-        username: req.data.username,
-        token
-    }));
+        // Create token
+        const token = jwt.sign(
+            {
+                username: req.data.username,
+                type: req.data.type
+            },
+            c.authConfig.TOKEN_KEY,
+            {
+                expiresIn: "2h",
+            }
+        );
+
+        res.statusCode = StatusCodes.OK
+        res.setHeader('Content-Type', c.contentTypes.JSON);
+        return res.end(JSON.stringify({
+            username: req.data.username,
+            token
+        }));
+    }
 }
 
 module.exports = {
