@@ -2,6 +2,7 @@ module.exports = {
     createUser: {
         type: "object",
         properties: {
+            type: {type: "integer", minimum: 1, maximum: 3},
             username: {type: "string", minLength: 3, maxLength: 20},
             firstname: {type: "string", minLength: 2, maxLength: 20},
             lastname: {type: "string", minLength: 2, maxLength: 20},

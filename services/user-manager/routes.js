@@ -16,9 +16,13 @@ const loginValidator = new NoodleDataValidation(usersSchemas.login)
 module.exports = {
     '/users': {
         GET: {
-            function: userCtrl.getUsers(),
-            middlewares: [authenticator, noodleUserAuthorization(UserTypes.admin)]
+            function: userCtrl.getUsers,
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.admin), dataParser]
         },
+        POST: {
+            function: userCtrl.createUser,
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter), dataParser, signupValidator]
+        }
     },
     '/users/login': {
         POST: {
@@ -26,40 +30,4 @@ module.exports = {
             middlewares: [dataParser, loginValidator]
         },
     },
-    '/employees': {
-        GET: {
-            function: userCtrl.getUsers(UserTypes.employee),
-            middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter)]
-        },
-        POST: {
-            function: userCtrl.createUser(UserTypes.employee),
-            middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter), dataParser, signupValidator]
-        }
-    },
-    '/supporters': {
-        GET: {
-            function: userCtrl.getUsers(UserTypes.supporter),
-            middlewares: [authenticator, noodleUserAuthorization(UserTypes.admin)]
-        },
-        POST: {
-            function: userCtrl.createUser(UserTypes.supporter),
-            middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter), dataParser, signupValidator]
-        }
-    },
-    '/admins': {
-        GET: {
-            function: userCtrl.getUsers(UserTypes.admin),
-            middlewares: [authenticator, noodleUserAuthorization(UserTypes.admin)]
-        },
-        POST: {
-            function: userCtrl.createUser(UserTypes.admin),
-            middlewares: [authenticator, noodleUserAuthorization(UserTypes.admin), dataParser, signupValidator]
-        }
-    },
-    '/test/:id_1/me/:id_2': {
-        GET: {
-            function: (req, res) => res.end(JSON.stringify(req.params)),
-            middlewares: [dataParser]
-        }
-    }
 };
