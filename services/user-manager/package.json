@@ -15,7 +15,7 @@
     "bcrypt": "^5.0.1",
     "http-status-codes": "^2.2.0",
     "jsonwebtoken": "^8.5.1",
-    "noodle-data-parser": "^2.0.1",
+    "noodle-data-parser": "^2.0.2",
     "noodle-data-validation": "^2.1.0",
     "noodle-user-authentication": "^1.0.0",
     "gheysari-resposer": "^2.1.0",
