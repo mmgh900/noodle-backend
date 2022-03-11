@@ -5,10 +5,12 @@ const {authConfig} = require("./config");
 const {UserTypes, noodleUserAuthorization} =  require('noodle-user-authorization');
 
 const authenticator = new Authenticator(authConfig)
-const ticketsSchemas  = require('./schemas/tickets-schema')
+const ticketsSchemas  = require('./schemas/ticket-schemas')
+const messageSchemas  = require('./schemas/message-schemas')
 const NoodleDataValidation = require('noodle-data-validation')
 
 const createTicketValidator = new NoodleDataValidation(ticketsSchemas.createTicket)
+const createMessageValidator = new NoodleDataValidation(messageSchemas.createMessage)
 
 module.exports = {
     '/tickets': {
@@ -25,5 +27,15 @@ module.exports = {
             middlewares: [authenticator, noodleUserAuthorization(UserTypes.employee), dataParser, createTicketValidator]
         },
     },
+    '/tickets/:ticketId/messages': {
+        GET: {
+            function: ticketCtrl.getAllTickets,
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter), dataParser]
+        },
+        POST: {
+            function: ticketCtrl.createTicket,
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.employee), dataParser, createMessageValidator]
+        },
+    }
 
 };

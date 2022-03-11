@@ -24,7 +24,7 @@ async function createProperty(req, res) {
 async function assignProperty(req, res) {
     await Property.update({
         id: req.data.id,
-        assignedTo: req.data.assignedTo
+        supporter_username: req.data.supporter_username
     })
 }
 
