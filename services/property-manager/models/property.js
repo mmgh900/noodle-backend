@@ -2,13 +2,13 @@ const query = require('../../../db')
 
 class Property {
     name;
-    assignedTo;
+    supporterUsername;
     id;
 
-    constructor(id, name, assignedTo) {
+    constructor(id, name, supporterUsername) {
         this.id = id
         this.name = name
-        this.assignedTo = assignedTo
+        this.supporterUsername = supporterUsername
     }
 
     static async init() {
@@ -18,9 +18,9 @@ class Property {
             (
                 id serial NOT NULL,
                 name character varying NOT NULL,
-                assignedTo character varying NOT NULL,
+                supporterUsername character varying NOT NULL,
                 PRIMARY KEY (id),
-                FOREIGN KEY(assignedTo) REFERENCES public."User" (username) ON DELETE CASCADE
+                FOREIGN KEY(supporterUsername) REFERENCES public."User" (username) ON DELETE CASCADE
             );
             `
         )
@@ -32,13 +32,13 @@ class Property {
         return result.rows
     }
 
-    static async add({name, assignedTo}) {
+    static async add({name, supporterUsername}) {
         await query(`
             INSERT INTO public."Property"
-                (name, assignedTo)
+                (name, supporterUsername)
                 VALUES ($1,$2)
                 RETURNING "Property"."id" AS id
-            `, [name, assignedTo])
+            `, [name, supporterUsername])
     }
 
     static async remove(id) {

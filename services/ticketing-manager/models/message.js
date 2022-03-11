@@ -3,13 +3,13 @@ const query = require('../../../db')
 class Message {
     id;
     ticketId;
-    senderId;
+    senderUsername;
     text;
 
 
-    constructor(ticketId, senderId, text) {
+    constructor(ticketId, senderUsername, text) {
         this.ticketId = ticketId;
-        this.senderId = senderId;
+        this.senderUsername = senderUsername;
         this.text = text;
     }
 
@@ -18,13 +18,13 @@ class Message {
             `
             CREATE TABLE IF NOT EXISTS public."Message"
             (
-                'id' serial NOT NULL,
-                'ticketId' character varying NOT NULL,
-                'senderId' character varying NOT NULL,
-                'text' character varying NOT NULL,
+                id serial NOT NULL,
+                "ticketId" character varying NOT NULL,
+                "senderUsername" character varying NOT NULL,
+                "text" character varying NOT NULL,
                 
-                PRIMARY KEY (id)
-                FOREIGN KEY("senderId") REFERENCES public."User" (username) ON DELETE CASCADE,
+                PRIMARY KEY (id),
+                FOREIGN KEY("senderUsername") REFERENCES public."User" (username) ON DELETE CASCADE,
                 FOREIGN KEY("ticketId") REFERENCES public."Ticket" (id) ON DELETE CASCADE
             );
             `
@@ -33,15 +33,15 @@ class Message {
     }
 
     /**
-     * @param messageId {number}
+     * @param ticketId {number}
      * @returns {Promise<*>}
      */
-    static async getAllByMessageId(messageId) {
+    static async getAllByTicketId(ticketId) {
         const result = await query(`
             SELECT *
             FROM "Message" AS M
             INNER JOIN ticket AS T ON M."ticketId" = T."id"
-            WHERE T."id"=${messageId}
+            WHERE T."id"=${ticketId}
         `)
         return result.rows
     }
@@ -50,13 +50,13 @@ class Message {
      * @param message {Message}
      * @returns {Promise<void>}
      */
-    static async add({ticketId, senderId, text}) {
+    static async add({ticketId, senderUsername, text}) {
         await query(`
             INSERT INTO public."Message"
-                ("ticketId", "senderId", "text")
+                ("ticketId", "senderUsername", "text")
                 VALUES ($1,$2, $3)
                 RETURNING "Message"."id" AS id
-            `, [ticketId, senderId, text])
+            `, [ticketId, senderUsername, text])
     }
 
     /**

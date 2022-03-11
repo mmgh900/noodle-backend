@@ -16,7 +16,10 @@ async function getAllTickets(req, res) {
 }
 
 async function createTicket(req, res) {
-    await Ticket.add(req.data)
+    await Ticket.add({
+        ...req.data,
+        openerUsername: req.user.username
+    })
     res.statusCode = StatusCodes.OK
     res.end()
 }
@@ -25,7 +28,7 @@ async function createTicket(req, res) {
 async function assignTicket(req, res) {
     await Ticket.update({
         id: req.data.id,
-        assignedTo: req.data.assignedTo
+        supporterUsername: req.data.supporterUsername
     })
 }
 
