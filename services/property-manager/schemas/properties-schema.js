@@ -2,9 +2,9 @@ module.exports = {
     createProperty: {
         type: "object",
         properties: {
-            supporterUsername: {type: "string"},
+            supporter_username: {type: "string"},
             name: {type: "string", minLength: 2, maxLength: 20},
         },
-        required: ["name", "supporterUsername"]
+        required: ["name", "supporter_username"]
     },
 }

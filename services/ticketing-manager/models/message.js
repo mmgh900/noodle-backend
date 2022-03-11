@@ -6,43 +6,55 @@ class Message {
     senderUsername;
     text;
 
-
-    constructor(ticketId, senderUsername, text) {
-        this.ticketId = ticketId;
-        this.senderUsername = senderUsername;
-        this.text = text;
+    constructor() {
+        throw new Error('This is class not instantiatable. Please use static methods.')
     }
 
     static async init() {
         await query(
             `
-            CREATE TABLE IF NOT EXISTS public."Message"
+            CREATE TABLE IF NOT EXISTS public.messages
             (
                 id serial NOT NULL,
-                "ticketId" character varying NOT NULL,
-                "senderUsername" character varying NOT NULL,
-                "text" character varying NOT NULL,
+                ticket_id character varying NOT NULL,
+                sender_username character varying NOT NULL,
+                text character varying NOT NULL,
                 
                 PRIMARY KEY (id),
-                FOREIGN KEY("senderUsername") REFERENCES public."User" (username) ON DELETE CASCADE,
-                FOREIGN KEY("ticketId") REFERENCES public."Ticket" (id) ON DELETE CASCADE
+                FOREIGN KEY(sender_username) REFERENCES public.users (username) ON DELETE CASCADE,
+                FOREIGN KEY(ticket_id) REFERENCES public.tickets (id) ON DELETE CASCADE
             );
             `
         )
-        console.log("Message table created!")
+        console.log("Messages table created!")
     }
+
+
+    /**
+     * @param id {number}
+     * @returns {Promise<Message>}
+     */
+    static async get(id) {
+        const result = await query(`
+            SELECT *
+            FROM public.messages
+            WHERE id = $1
+        `, [id])
+        return result.rows[0]
+    }
+
 
     /**
      * @param ticketId {number}
      * @returns {Promise<*>}
      */
-    static async getAllByTicketId(ticketId) {
+    static async getAll(ticketId) {
         const result = await query(`
             SELECT *
-            FROM "Message" AS M
-            INNER JOIN ticket AS T ON M."ticketId" = T."id"
-            WHERE T."id"=${ticketId}
-        `)
+            FROM pubic.messages AS message
+            INNER JOIN ticket AS ticket ON message.ticket_id = ticket.id
+            WHERE ticket.id = $1
+        `, [ticketId])
         return result.rows
     }
 
@@ -52,12 +64,27 @@ class Message {
      */
     static async add({ticketId, senderUsername, text}) {
         await query(`
-            INSERT INTO public."Message"
-                ("ticketId", "senderUsername", "text")
+            INSERT INTO public.messages
+                (ticket_id, sender_username, text)
                 VALUES ($1,$2, $3)
-                RETURNING "Message"."id" AS id
             `, [ticketId, senderUsername, text])
     }
+
+
+    /**
+     * @param message {Message}
+     * @returns {Promise<void>}
+     */
+    static async update({ticketId, senderUsername, text, id}) {
+        await query(`
+            UPDATE public.messages
+            SET ticket_id = $1,
+                sender_username = $2,
+                text = $3
+            WHERE id = $4
+            `, [ticketId, senderUsername, text, id])
+    }
+
 
     /**
      * @param id {number}
@@ -65,7 +92,7 @@ class Message {
      */
 
     static async remove(id) {
-        await query(`DELETE FROM "Message" AS U WHERE U."id"=$1`, [id])
+        await query(`DELETE FROM "Message" id = $1`, [id])
     }
 
 }

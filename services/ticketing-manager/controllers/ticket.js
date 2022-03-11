@@ -28,7 +28,7 @@ async function createTicket(req, res) {
 async function assignTicket(req, res) {
     await Ticket.update({
         id: req.data.id,
-        supporterUsername: req.data.supporterUsername
+        supporter_username: req.data.supporter_username
     })
 }
 
