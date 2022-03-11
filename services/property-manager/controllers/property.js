@@ -1,36 +1,50 @@
 const Property = require('../models/property');
-const c = require('../config');
-const {
-    ReasonPhrases,
-    StatusCodes,
-    getReasonPhrase,
-    getStatusCode,
-} = require('http-status-codes');
+const responseSender = require("gheysari-resposer");
 
 
 async function getAllProperties(req, res) {
-    let properties = await Property.getAll();
-    res.statusCode = StatusCodes.OK
-    res.setHeader('Content-Type', c.contentTypes.JSON);
-    res.end(JSON.stringify({properties}));
+    try {
+        const properties = await Property.getAll();
+        responseSender.sendSuccessfulResponse(res, properties)
+    } catch (error) {
+        responseSender.sendInternalErrorResponse(res, error)
+    }
 }
 
 async function createProperty(req, res) {
-    await Property.add(req.data)
-    res.statusCode = StatusCodes.OK
-    res.end()
+    try {
+        await Property.add(req.data)
+        responseSender.sendSuccessfulResponse(res)
+    } catch (error) {
+        responseSender.sendInternalErrorResponse(res, error)
+    }
 }
 
 async function assignProperty(req, res) {
-    await Property.update({
-        id: req.data.id,
-        supporter_username: req.data.supporter_username
-    })
+    try {
+        const property = await Property.get(req.params.propertyId);
+        await Property.update({
+            ...property,
+            employeeUsername: req.data.employeeUsername
+        })
+        responseSender.sendSuccessfulResponse(res)
+    } catch (error) {
+        responseSender.sendInternalErrorResponse(res, error)
+    }
 }
 
+async function deleteProperty(req, res) {
+    try {
+        const property = await Property.remove(req.params.propertyId);
+        responseSender.sendSuccessfulResponse(res)
+    } catch (error) {
+        responseSender.sendInternalErrorResponse(res, error)
+    }
+}
 
 module.exports = {
     createProperty,
     getAllProperties,
-    assignProperty
+    assignProperty,
+    deleteProperty
 };

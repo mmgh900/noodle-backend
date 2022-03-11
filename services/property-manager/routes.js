@@ -9,6 +9,7 @@ const propertiesSchemas  = require('./schemas/properties-schema')
 const NoodleDataValidation = require('noodle-data-validation')
 
 const createPropertyValidator = new NoodleDataValidation(propertiesSchemas.createProperty)
+const assignPropertyValidator = new NoodleDataValidation(propertiesSchemas.assignProperty)
 
 module.exports = {
     '/properties': {
@@ -16,14 +17,21 @@ module.exports = {
             function: propertyCtrl.getAllProperties,
             middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter)]
         },
-        PUT: {
-            function: propertyCtrl.assignProperty,
-            middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter), dataParser]
-        },
         POST: {
             function: propertyCtrl.createProperty,
             middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter), dataParser, createPropertyValidator]
         },
     },
+    '/properties/:propertyId': {
+        PATCH: {
+            function: propertyCtrl.assignProperty,
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter), dataParser, assignPropertyValidator]
+        },
+        DELETE: {
+            function: propertyCtrl.deleteProperty,
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter), dataParser]
+        },
+    },
+
 
 };

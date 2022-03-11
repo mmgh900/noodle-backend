@@ -57,7 +57,7 @@ class Property {
      * @returns {Promise<User>}
      */
     static async get(id) {
-        const result = await query(`SELECT * FROM public.properties id = $1`, [id])
+        const result = await query(`SELECT * FROM public.properties WHERE id = $1`, [id])
         return result.rows[0]
     }
 
@@ -66,7 +66,7 @@ class Property {
      * @returns {Promise<void>}
      */
     static async remove(id) {
-        await query(`DELETE FROM public.properties id = $1`, [id])
+        await query(`DELETE FROM public.properties WHERE id = $1`, [id])
     }
 
     /**
@@ -76,12 +76,13 @@ class Property {
      * @returns {Promise<void>}
      */
     static async update({id, name, employeeUsername}) {
-        query(`
+        const result = await query(`
             UPDATE public.properties
             SET name = $1,
                 employee_username = $2
             WHERE id = $3   
         `, [name, employeeUsername, id])
+        return result
     }
 
 }

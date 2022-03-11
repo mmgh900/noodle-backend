@@ -16,7 +16,7 @@ class Message {
             CREATE TABLE IF NOT EXISTS public.messages
             (
                 id serial NOT NULL,
-                ticket_id character varying NOT NULL,
+                ticket_id integer NOT NULL,
                 sender_username character varying NOT NULL,
                 text character varying NOT NULL,
                 

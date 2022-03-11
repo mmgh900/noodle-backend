@@ -21,10 +21,17 @@ function loadApps() {
 
         // Initializing models to create database tales if do not exist
         const modelsNames = fs.readdirSync(`${c.servicesDirectory}/${appName}/models`);
-        modelsNames.forEach(modelName => {
+        modelsNames.forEach(async modelName => {
             const model = require(`${c.servicesDirectory}/${appName}/models/${modelName}`);
-            model.init()
+            try {
+                await model.init()
+            } catch (error) {
+                console.log(error)
+            }
+
         })
+
+
 
         Object.keys(app.routes).forEach(route => {
             Object.keys(app.routes[route]).forEach(method => {
