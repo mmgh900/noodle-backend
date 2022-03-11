@@ -16,6 +16,8 @@
   "dependencies": {
     "noodle-router": "^1.2.4",
     "noodle-server": "^1.0.0",
+    "noodle-data-parser": "^2.0.2",
+    "noodle-user-authentication": "^2.0.1",
     "pg": "^8.7.3"
   },
   "devDependencies": {

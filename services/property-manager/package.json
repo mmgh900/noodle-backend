@@ -14,6 +14,8 @@
     "noodle-data-validation": "^2.1.0",
     "noodle-user-authentication": "^1.0.0",
     "noodle-user-authorization": "^2.0.0",
-    "gheysari-resposer": "^2.2.0"
+    "gheysari-resposer": "^2.2.0",
+    "axios": "^0.26.1",
+    "jsonwebtoken": "^8.5.1"
   }
 }

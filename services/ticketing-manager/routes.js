@@ -1,41 +1,41 @@
 const ticketCtrl = require('./controllers/ticket');
-const dataParser = require('noodle-data-parser');
-const Authenticator = require('noodle-user-authentication');
-const {authConfig} = require("./config");
+
 const {UserTypes, noodleUserAuthorization} =  require('noodle-user-authorization');
 
-const authenticator = new Authenticator(authConfig)
+
 const ticketsSchemas  = require('./schemas/ticket-schemas')
 const messageSchemas  = require('./schemas/message-schemas')
 const NoodleDataValidation = require('noodle-data-validation')
+const {defaultMiddlewares} = require("../../config");
 
 const createTicketValidator = new NoodleDataValidation(ticketsSchemas.createTicket)
+const assignTicketValidator = new NoodleDataValidation(ticketsSchemas.assignTicket)
 const createMessageValidator = new NoodleDataValidation(messageSchemas.createMessage)
 
 module.exports = {
     '/tickets': {
         GET: {
             function: ticketCtrl.getAllTickets,
-            middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter)]
-        },
-        PUT: {
-            function: ticketCtrl.assignTicket,
-            middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter), dataParser]
+            middlewares: [...defaultMiddlewares, noodleUserAuthorization(UserTypes.supporter)]
         },
         POST: {
             function: ticketCtrl.createTicket,
-            middlewares: [authenticator, noodleUserAuthorization(UserTypes.employee), dataParser, createTicketValidator]
+            middlewares: [...defaultMiddlewares, noodleUserAuthorization(UserTypes.employee), createTicketValidator]
         },
     },
-    '/tickets/:ticketId/messages': {
+    '/tickets/:ticketId': {
         GET: {
-            function: ticketCtrl.getAllTickets,
-            middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter), dataParser]
+            function: ticketCtrl.getTicket,
+            middlewares: [...defaultMiddlewares, noodleUserAuthorization(UserTypes.supporter)]
         },
-        POST: {
-            function: ticketCtrl.createTicket,
-            middlewares: [authenticator, noodleUserAuthorization(UserTypes.employee), dataParser, createMessageValidator]
+        PATCH: {
+            function: ticketCtrl.assignTicket,
+            middlewares: [...defaultMiddlewares, noodleUserAuthorization(UserTypes.supporter), assignTicketValidator]
         },
+        DELETE : {
+            function: ticketCtrl.deleteTicket,
+            middlewares: [...defaultMiddlewares, noodleUserAuthorization(UserTypes.supporter)]
+        }
     }
 
 };

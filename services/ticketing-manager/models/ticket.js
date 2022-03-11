@@ -60,7 +60,6 @@ class Ticket {
         // TODO: Apply filters
         const result = await query(`
             SELECT * FROM public.tickets
-            WHERE 
         `)
         return result.rows
     }
@@ -102,7 +101,7 @@ class Ticket {
      * @returns {Promise<void>}
      */
     static async remove(id) {
-        await query(`DELETE FROM public.tickets id = $1`, [id])
+        await query(`DELETE FROM public.tickets WHERE id = $1`, [id])
     }
 
 }

@@ -2,10 +2,17 @@ module.exports = {
     createTicket: {
         type: "object",
         properties: {
-            relatedToProperty: {type: "string"},
+            propertyId: {type: "number"},
             title: {type: "string", minLength: 3, maxLength: 50},
             description: {type: "string", minLength: 3, maxLength: 200}
         },
-        required: ["title", "description", "relatedToProperty"]
+        required: ["title", "description", "propertyId"]
     },
+    assignTicket: {
+        type: "object",
+        properties: {
+            supporterUsername: {type: "string"}
+        },
+        required: ["supporterUsername"]
+    }
 }

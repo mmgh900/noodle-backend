@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const c = require('../config')
+const c = require('../../../config')
 
 /**
  * @param username {string}
