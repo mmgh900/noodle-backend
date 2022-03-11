@@ -93,18 +93,17 @@ class User {
      * @param {User} user
      * @returns {Promise<void>}
      */
-    static async update({firstname, lastname, email, username, password, type}) {
-        const result = await query(`
+    static async update({firstname, lastname, email, username, type}) {
+        await query(`
                 UPDATE public.users
                 SET firstname = $1,
                     lastname = $2,
                     email = $3,
                     username = $4,
-                    password = $5,
-                    type = $6
-                    WHERE username = $7;
+                    type = $5
+                    WHERE username = $6;
          
-        `, [firstname, lastname, email, username, password, type, username])
+        `, [firstname, lastname, email, username, type, username])
 
     }
 

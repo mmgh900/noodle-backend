@@ -18,7 +18,7 @@
     "noodle-data-parser": "^2.0.2",
     "noodle-data-validation": "^2.1.0",
     "noodle-user-authentication": "^1.0.0",
-    "gheysari-resposer": "^2.1.0",
+    "gheysari-resposer": "^2.2.0",
     "noodle-user-authorization": "^2.0.0"
   }
 }

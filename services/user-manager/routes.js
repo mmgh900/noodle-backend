@@ -30,4 +30,19 @@ module.exports = {
             middlewares: [dataParser, loginValidator]
         },
     },
+    '/users/:username': {
+        GET: {
+            function: userCtrl.getUser,
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.supporter), dataParser]
+        },
+        PATCH: {
+            function: userCtrl.editUser,
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.admin), dataParser]
+        },
+        DELETE: {
+            function: userCtrl.deleteUser,
+            middlewares: [authenticator, noodleUserAuthorization(UserTypes.admin), dataParser]
+        }
+    },
+
 };

@@ -17,9 +17,9 @@ const responseSender = require("gheysari-resposer");
 async function login(req, res) {
     try {
         const user = await User.get(req.data.username)
-        const token = createToken(user.username, user.type)
         const isPasswordValid = await comparePassword(req.data.password, user.password)
         if (isPasswordValid) {
+            const token = createToken(user.username, user.type)
             const result = {
                 username: user?.username,
                 token
@@ -36,6 +36,7 @@ async function login(req, res) {
 async function getUser(req, res) {
     try {
         const user = await User.get(req.params.username);
+        delete user.password
         responseSender.sendSuccessfulResponse(res, user)
     } catch (error) {
         responseSender.sendInternalErrorResponse(res, error)
@@ -44,7 +45,7 @@ async function getUser(req, res) {
 
 async function getUsers(req, res) {
     try {
-        const type = req.query.type
+        const type = req.query?.type
         const users = await User.getAll(type);
         responseSender.sendSuccessfulResponse(res, users)
     } catch (error) {
@@ -100,7 +101,7 @@ async function editUser(req, res) {
             ...user,
             ...req.data
         })
-        user = await User.get(req.query.username)
+        user = await User.get(req.params.username)
         responseSender.sendSuccessfulResponse(res, user)
     } catch (error) {
         responseSender.sendInternalErrorResponse(res, error)
