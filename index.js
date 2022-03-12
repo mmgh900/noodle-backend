@@ -4,7 +4,7 @@ const Server = require('noodle-server');
 const Router = require('noodle-router');
 const c = require('./config');
 const eventEmitter = new EventEmitter();
-
+const open = require('open');
 c.serverConfig.eventEmitter = eventEmitter;
 c.routerConfig.eventEmitter = eventEmitter;
 const server = new Server(c.serverConfig);
@@ -32,7 +32,6 @@ function loadApps() {
         })
 
 
-
         Object.keys(app.routes).forEach(route => {
             Object.keys(app.routes[route]).forEach(method => {
                 const routeObj = {
@@ -44,5 +43,9 @@ function loadApps() {
                 router.addRoute(routeObj);
             });
         });
+
+
+        // opens the document in the default browser
+        open('https://documenter.getpostman.com/view/15716973/UVsHV8mY')
     });
 }
