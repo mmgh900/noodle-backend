@@ -8,11 +8,12 @@ module.exports = {
         },
         required: ["title", "description", "propertyId"]
     },
-    assignTicket: {
+    editTicket: {
         type: "object",
         properties: {
-            supporterUsername: {type: "string"}
+            supporterUsername: {type: "string"},
+            isOpen: {type: "boolean"}
         },
-        required: ["supporterUsername"]
+        required: []
     }
 }

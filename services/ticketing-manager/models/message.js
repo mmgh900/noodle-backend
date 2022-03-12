@@ -51,9 +51,8 @@ class Message {
     static async getAll(ticketId) {
         const result = await query(`
             SELECT *
-            FROM pubic.messages AS message
-            INNER JOIN ticket AS ticket ON message.ticket_id = ticket.id
-            WHERE ticket.id = $1
+            FROM public.messages
+            WHERE ticket_id = $1
         `, [ticketId])
         return result.rows
     }
@@ -92,7 +91,7 @@ class Message {
      */
 
     static async remove(id) {
-        await query(`DELETE FROM "Message" id = $1`, [id])
+        await query(`DELETE FROM public.messages id = $1`, [id])
     }
 
 }

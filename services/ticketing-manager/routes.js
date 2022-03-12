@@ -1,4 +1,5 @@
 const ticketCtrl = require('./controllers/ticket');
+const messageCtrl = require('./controllers/message');
 
 const {UserTypes, noodleUserAuthorization} =  require('noodle-user-authorization');
 
@@ -9,7 +10,7 @@ const NoodleDataValidation = require('noodle-data-validation')
 const {defaultMiddlewares} = require("../../config");
 
 const createTicketValidator = new NoodleDataValidation(ticketsSchemas.createTicket)
-const assignTicketValidator = new NoodleDataValidation(ticketsSchemas.assignTicket)
+const editTicketValidator = new NoodleDataValidation(ticketsSchemas.editTicket)
 const createMessageValidator = new NoodleDataValidation(messageSchemas.createMessage)
 
 module.exports = {
@@ -29,13 +30,23 @@ module.exports = {
             middlewares: [...defaultMiddlewares, noodleUserAuthorization(UserTypes.supporter)]
         },
         PATCH: {
-            function: ticketCtrl.assignTicket,
-            middlewares: [...defaultMiddlewares, noodleUserAuthorization(UserTypes.supporter), assignTicketValidator]
+            function: ticketCtrl.editTicket,
+            middlewares: [...defaultMiddlewares, noodleUserAuthorization(UserTypes.supporter), editTicketValidator]
         },
         DELETE : {
             function: ticketCtrl.deleteTicket,
             middlewares: [...defaultMiddlewares, noodleUserAuthorization(UserTypes.supporter)]
         }
+    },
+    '/tickets/:ticketId/messages': {
+        GET: {
+            function: messageCtrl.getAllMessagesByTicketId,
+            middlewares: [...defaultMiddlewares, noodleUserAuthorization(UserTypes.employee)]
+        },
+        POST: {
+            function: messageCtrl.createMessage,
+            middlewares: [...defaultMiddlewares, noodleUserAuthorization(UserTypes.employee), createMessageValidator]
+        },
     }
 
 };

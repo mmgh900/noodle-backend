@@ -23,7 +23,7 @@ module.exports = {
     '/users/login': {
         POST: {
             function: userCtrl.login,
-            middlewares: [...defaultMiddlewares, loginValidator]
+            middlewares: [defaultMiddlewares[1], loginValidator]
         },
     },
     '/users/:username': {

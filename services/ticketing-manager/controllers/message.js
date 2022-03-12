@@ -1,27 +1,38 @@
 const Message = require('../models/message');
-const c = require('../config');
-const {
-    ReasonPhrases,
-    StatusCodes,
-    getReasonPhrase,
-    getStatusCode,
-} = require('http-status-codes');
+const responseSender = require("gheysari-resposer");
+const {StatusCodes} = require("http-status-codes");
 
 
 async function getAllMessagesByTicketId(req, res) {
-    let tickets = await Message.getAllByTicketId(req.params.ticketId);
-    res.statusCode = StatusCodes.OK
-    res.setHeader('Content-Type', c.contentTypes.JSON);
-    res.end(JSON.stringify({tickets}));
+    try {
+        const messages = await Message.getAll(req.params.ticketId);
+        responseSender.sendSuccessfulResponse(res, messages)
+    } catch (error) {
+        responseSender.sendInternalErrorResponse(res, error)
+    }
 }
 
 async function createMessage(req, res) {
-    await Message.add(req.data)
-    res.statusCode = StatusCodes.OK
-    res.end()
+    try {
+        await Message.add({
+            ...req.data,
+            ticketId: req.params.ticketId,
+            senderUsername: req.user.username
+        })
+        responseSender.sendSuccessfulResponse(res)
+    } catch (error) {
+        if (parseInt(error.code) === 23503) {
+            res.statusCode = StatusCodes.INTERNAL_SERVER_ERROR
+            res.setHeader('Content-Type', 'application/json');
+            return res.end(JSON.stringify({
+                message: "The ticket that you are trying to add message to does not exist!"
+            }));
+        } else {
+            responseSender.sendInternalErrorResponse(res, error)
+        }
+
+    }
 }
-
-
 
 module.exports = {
     getAllMessagesByTicketId,

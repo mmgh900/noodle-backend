@@ -47,19 +47,19 @@ async function createTicket(req, res) {
 }
 
 
-async function assignTicket(req, res) {
+async function editTicket(req, res) {
     try {
         await _checkBeingSupporter(res, req.data.supporterUsername)
         const ticket = await Ticket.get(req.params.ticketId);
         await Ticket.update({
             propertyId: ticket['property_id'],
-            isOpen: ticket['is_open'],
+            isOpen: req.data.supporterUsername ? req.data.supporterUsername : ticket['is_open'],
             openerUsername: ticket['opener_username'],
             description: ticket['description'],
             title: ticket['title'],
             id: ticket['id'],
             createdAt: ticket['created_at'],
-            supporterUsername: req.data.supporterUsername
+            supporterUsername: req.data.supporterUsername ? req.data.supporterUsername : ticket['supporter_username']
         })
         responseSender.sendSuccessfulResponse(res)
     } catch (error) {
@@ -112,7 +112,7 @@ async function deleteTicket(req, res) {
 module.exports = {
     createTicket,
     getAllTickets,
-    assignTicket,
+    editTicket,
     deleteTicket,
     getTicket
 };
