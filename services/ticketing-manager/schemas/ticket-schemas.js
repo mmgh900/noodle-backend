@@ -8,6 +8,7 @@ module.exports = {
         },
         required: ["title", "description", "propertyId"]
     },
+    
     editTicket: {
         type: "object",
         properties: {

@@ -58,11 +58,46 @@ class Ticket {
      */
     static async getAll(supporterUsername, propertyId, openerUsername, startDate, endDate, isOpen) {
         // TODO: Apply filters
+        const filters = []
+        const filterParams = []
+
+        if (supporterUsername) {
+            filters.push(`supporter_name = $${filters.length + 1}`)
+            filterParams.push(supporterUsername)
+        }
+        if (propertyId) {
+            filters.push(`property_id = $${filters.length + 1}`)
+            filterParams.push(propertyId)
+        }
+
+        if (openerUsername) {
+            filters.push(`opener_username = $${filters.length + 1}`)
+            filterParams.push(openerUsername)
+        }
+
+        if (startDate) {
+            filters.push(`created_at > $${filters.length + 1}`)
+            filterParams.push(startDate)
+        }
+
+        if (isOpen) {
+            filters.push(`is_open = $${filters.length + 1}`)
+            filterParams.push(startDate)
+        }
+
+        if (endDate) {
+            filters.push(`created_at < $${filters.length + 1}`)
+            filterParams.push(startDate)
+        }
+
+
         const result = await query(`
             SELECT * FROM public.tickets
-        `)
+            ${filters.length > 0 ? `WHERE ${filters.join(',')}` : ''}
+        `, filterParams)
         return result.rows
     }
+
 
     /**
      * @param Ticket {Ticket}

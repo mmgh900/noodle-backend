@@ -46,6 +46,6 @@ function loadApps() {
 
 
         // opens the document in the default browser
-        open('https://documenter.getpostman.com/view/15716973/UVsHV8mY')
+        // open('https://documenter.getpostman.com/view/15716973/UVsHV8mY')
     });
 }
